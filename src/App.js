@@ -1,7 +1,33 @@
 import React from 'react'
+import { useRoutes } from 'react-router-dom'
+import Frame from './components/Frame';
+import { adminRoutes } from './routes'
+import { userRoutes } from './routes'
+import { loginRoutes } from './routes'
+import './App.css'
 
 export default function App() {
-    return (
-        <div>App</div>
-    )
+    const adminElement = useRoutes(adminRoutes);
+    const userElement = useRoutes(userRoutes);
+    const loginElement = useRoutes(loginRoutes);
+    let url = window.location.href.split('/')[3];
+    if (url === "admin") {
+        return (
+            <Frame>
+                {adminElement}
+            </Frame >
+        )
+    } else if (url === "user") {
+        return (
+            <Frame>
+                {userElement}
+            </Frame >
+        )
+    } else {
+        return (
+            <>
+                {loginElement}
+            </>
+        )
+    }
 }
