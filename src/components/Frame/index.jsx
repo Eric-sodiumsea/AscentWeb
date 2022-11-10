@@ -1,22 +1,27 @@
 import React from 'react'
 import { Layout, Menu } from 'antd'
-import routes from '../../routes'
+import { adminRoutes, userRoutes } from '../../routes'
 import { useNavigate } from 'react-router-dom'
 import logo from './logo.png'
 import './index.css'
 
-const { Header, Content, Sider } = Layout;
-
-const isShowRoutes = routes.filter(route => route.isShow);
-const SidebarItems = isShowRoutes.map(route => {
-    return {
-        key: route.path,
-        icon: route.icon,
-        label: route.name,
-    }
-})
-
 export default function Frame(props) {
+    const { Header, Content, Sider } = Layout;
+    let routes;
+    if (props.children[0] != null) {
+        routes = adminRoutes;
+    } else {
+        routes = userRoutes
+    }
+    const isShowRoutes = routes.filter(route => route.isShow);
+    const SidebarItems = isShowRoutes.map(route => {
+        return {
+            key: route.path,
+            icon: route.icon,
+            label: route.name,
+        }
+    })
+
     const navigate = new useNavigate();
     return (
         <Layout>

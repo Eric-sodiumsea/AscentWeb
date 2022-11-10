@@ -32,9 +32,8 @@ import Error from '../pages/Error'
 // icon 图表
 import { ShoppingCartOutlined /* 购物车 */, TeamOutlined /* 用户管理 */, MailOutlined /* 邮件管理 */, ShoppingOutlined /* 商品管理 */, ShopOutlined /* 商品浏览 */ } from '@ant-design/icons'
 
-
-export default [
-    // （0）登录、注册（分管理员和普通用户 -- 选择）
+// （0）登录、注册（分管理员和普通用户 -- 选择）
+export const loginRoutes = [
     {
         path: '/signin',
         element: <SignIn />
@@ -44,7 +43,21 @@ export default [
         element: <SignUp />
     },
 
-    // 管理员
+    // 初始页面 跳转至登录
+    {
+        path: '/',
+        element: <Navigate to="/signin" />
+    },
+
+    // 错误页面
+    {
+        path: '*',
+        element: <Error />
+    }
+]
+
+// 管理员
+export const adminRoutes = [
     {
         path: '/admin',
         element: <Navigate to="/admin/products" />
@@ -84,8 +97,15 @@ export default [
         isShow: true,
         icon: <MailOutlined />,
     },
+    // 错误页面
+    {
+        path: '*',
+        element: <Error />
+    }
+]
 
-    // 普通用户
+// 普通用户
+export const userRoutes = [
     {
         path: '/user',
         element: <Navigate to="/user/products" />
@@ -126,13 +146,6 @@ export default [
         element: <OrderItem />,
         isShow: false
     },
-
-    // 初始页面 跳转至登录
-    {
-        path: '/',
-        element: <Navigate to="/signin" />
-    },
-
     // 错误页面
     {
         path: '*',
