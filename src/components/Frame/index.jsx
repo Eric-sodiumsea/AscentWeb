@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Layout, Menu } from 'antd'
 import { adminRoutes, userRoutes } from '../../routes'
 import { useNavigate } from 'react-router-dom'
 import logo from './logo.png'
 import './index.css'
+import { isLogined } from '../../utils/auth'
+
+const navigate = new useNavigate();
 
 export default function Frame(props) {
     const { Header, Content, Sider } = Layout;
@@ -22,7 +25,13 @@ export default function Frame(props) {
         }
     })
 
-    const navigate = new useNavigate();
+    // 判断是否登录，若还没登录，则重定向回登录页
+    useEffect(() => {
+        if (!isLogined()) {
+            navigate('/signin');
+        }
+    }, [])
+
     return (
         <Layout>
             <Header className="header" style={{ backgroundColor: "rgb(70, 123, 167)" }}>
