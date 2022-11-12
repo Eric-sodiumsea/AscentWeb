@@ -13,13 +13,13 @@ export default function App() {
     let url = window.location.href.split('/')[3];
     if (url === "admin") {
         return (
-            <Frame>
+            <Frame url={url}>
                 {adminElement}
             </Frame >
         )
     } else if (url === "user") {
         return (
-            <Frame>
+            <Frame url={url}>
                 {userElement}
             </Frame >
         )

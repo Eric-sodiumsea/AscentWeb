@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'
 import logo from '../../components/Frame/logo.png'
 
@@ -115,11 +116,16 @@ const rowSelection = {
 };
 
 export default function ProductsManage() {
+    const navigate = useNavigate();
+    const addClick = () => {
+        navigate('edit/new');
+    }
+
     return (
         <Card
             title="商品管理列表"
             extra={
-                <Button type="primary">
+                <Button type="primary" onClick={addClick} >
                     新增
                 </Button>
             }
