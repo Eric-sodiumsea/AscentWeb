@@ -19,6 +19,7 @@ import SignUp from '../pages/SignUp'
 import Email from '../pages/Email'
 import ProductsManage from '../pages/ProductsManage'
 import ProductItem from '../pages/ProductItem'
+import ProductEdit from '../pages/ProductEdit'
 import Users from '../pages/Users'
 import UserItem from '../pages/UserItem'
 // 普通用户
@@ -70,9 +71,16 @@ export const adminRoutes = [
         isShow: true,
         icon: <ShopOutlined />,
     },
+    // 商品详情
     {
-        path: "/admin/products/:productId", //路径,携带参数: 商品ID
+        path: "/admin/products/detail/:productId", //路径,携带参数: 商品ID
         element: <ProductItem />,
+        isShow: false
+    },
+    // 商品新增 / 编辑
+    {
+        path: "/admin/products/edit/:productId", //路径,携带参数: 商品ID
+        element: <ProductEdit />,
         isShow: false
     },
     // （2）用户管理
@@ -119,7 +127,7 @@ export const userRoutes = [
         icon: <ShopOutlined />,
     },
     {
-        path: "/user/products/:productId", //路径,携带参数: 商品ID
+        path: "/user/products/detail/:productId", //路径,携带参数: 商品ID
         name: 'ProductItem',
         element: <ProductItem />,
         isShow: false

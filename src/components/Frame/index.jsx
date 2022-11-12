@@ -8,7 +8,7 @@ import './index.css'
 export default function Frame(props) {
     const { Header, Content, Sider } = Layout;
     let routes;
-    if (props.children[0] != null) {
+    if (props.url === "admin") {
         routes = adminRoutes;
     } else {
         routes = userRoutes
