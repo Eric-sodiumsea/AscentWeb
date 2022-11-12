@@ -1,12 +1,28 @@
 import React, { useEffect } from 'react'
-import { Layout, Menu } from 'antd'
+import { NavLink } from 'react-router-dom';
+import { Layout, Menu, Dropdown, Space, Avatar } from 'antd'
+import { DownOutlined } from '@ant-design/icons';
 import { adminRoutes, userRoutes } from '../../routes'
 import { useNavigate } from 'react-router-dom'
 import logo from './logo.png'
 import './index.css'
-import { isLogined } from '../../utils/auth'
+import { removeToken, isLogined } from '../../utils/auth'
 
-const navigate = new useNavigate();
+const items = [
+    {
+        label: (<a href="/">修改账号信息</a>),
+        key: '0',
+    },
+    {
+        type: 'divider',
+    },
+    {
+        label: (
+            <NavLink to="/signin" onClick={removeToken}>退出登录</NavLink>
+        ),
+        key: '1',
+    },
+];
 
 export default function Frame(props) {
     const { Header, Content, Sider } = Layout;
@@ -25,6 +41,8 @@ export default function Frame(props) {
         }
     })
 
+    let navigate = new useNavigate();
+
     // 判断是否登录，若还没登录，则重定向回登录页
     useEffect(() => {
         if (!isLogined()) {
@@ -38,6 +56,17 @@ export default function Frame(props) {
                 <div className="logo">
                     <img src={logo} alt="" style={{ height: "64px" }} />
                 </div>
+                <Dropdown
+                    menu={{ items }}
+                >
+                    <NavLink to="/admin/users/edit">
+                        <Space>
+                            <Avatar>A</Avatar>
+                            <span style={{ color: 'white' }}>用户名</span>
+                            <DownOutlined style={{ color: 'white' }} />
+                        </Space>
+                    </NavLink>
+                </Dropdown>
             </Header>
             <Layout>
                 <Sider width={200} className="site-layout-background">

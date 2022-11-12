@@ -14,3 +14,8 @@
 .site-layout-background {
     background: #fff;
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
