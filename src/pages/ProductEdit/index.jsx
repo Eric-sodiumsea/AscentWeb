@@ -78,7 +78,7 @@ export default function ProductEdit() {
     );
 
     return (
-        <Card title="商品编辑" bordered={false} hoverable={true} headStyle={{ textAlign: 'center' }} >
+        <Card title="商品编辑" bordered={false} hoverable={true} headStyle={{ textAlign: 'center', fontWeight: 'bold' }} >
             <Form
                 {...formItemLayout}
                 name="edit"
