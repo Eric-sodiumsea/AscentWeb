@@ -17,6 +17,7 @@ export default function SignIn() {
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
         setToken(values.username);
+        // setToken(userId) // 将用户ID设为token
         navigate('/admin');
     };
 

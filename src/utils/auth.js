@@ -12,8 +12,8 @@ export function removeToken() {
 
 export function isLogined() {
     if (localStorage.getItem('token')) {
-        return true;
+        return localStorage.getItem('token'); // userId
     } else {
-        return false;
+        return 0;
     }
 }

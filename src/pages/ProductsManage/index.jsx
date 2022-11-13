@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'
 import logo from '../../components/Frame/logo.png'
 
@@ -13,12 +13,18 @@ const columns = [
     {
         title: '商品名',
         dataIndex: 'productName',
-        render: (text) => <Button type='link'>{text}</Button>,
+        render: (text, record, index) => <Button type='link'><NavLink to={'edit/' + index}>{text}</NavLink></Button>,
         align: "center",
     },
     {
         title: '价格',
         dataIndex: 'price',
+        render: (text) => <span style={{ color: 'red' }}>{text}</span>,
+        align: "center",
+    },
+    {
+        title: '库存',
+        dataIndex: 'productNumber',
         align: "center",
     },
     {
@@ -42,11 +48,6 @@ const columns = [
         align: "center",
     },
     {
-        title: '库存',
-        dataIndex: 'productNumber',
-        align: "center",
-    },
-    {
         title: '描述',
         dataIndex: 'description',
         align: "center",
@@ -55,20 +56,18 @@ const columns = [
         title: '操作',
         dataIndex: 'action',
         render: (text, record, index) => (
-            <>
-                <Space size="middle">
-                    <Button>修改</Button>
-                    <Popconfirm
-                        title="确认删除此项？"
-                        okText="确定"
-                        onConfirm={() => { console.log("用户确认删除！") }}
-                        cancelText="取消"
-                        onCancel={() => { console.log("用户取消删除！") }}
-                    >
-                        <Button>删除</Button>
-                    </Popconfirm>
-                </Space>
-            </>
+            <Space size="middle">
+                <Button><NavLink to={'edit/' + index}>修改</NavLink></Button>
+                <Popconfirm
+                    title="确认删除此项？"
+                    okText="确定"
+                    onConfirm={() => { console.log("用户确认删除！") }}
+                    cancelText="取消"
+                    onCancel={() => { console.log("用户取消删除！") }}
+                >
+                    <Button>删除</Button>
+                </Popconfirm>
+            </Space>
         ),
         align: "center",
     },
@@ -79,8 +78,8 @@ const data = [
         image: logo,
         productName: 'A',
         price: 32,
-        tags: ['nice', 'developer'],
         productNumber: 10,
+        tags: ['nice', 'developer'],
         description: 'New York No. 1 Lake Park',
     },
     {
@@ -88,8 +87,8 @@ const data = [
         image: logo,
         productName: 'B',
         price: 42,
-        tags: ['loser'],
         productNumber: 10,
+        tags: ['loser'],
         description: 'New York No. 1 Lake Park',
     },
     {
@@ -97,8 +96,8 @@ const data = [
         image: logo,
         productName: 'C',
         price: 42,
-        tags: ['cool', 'teacher'],
         productNumber: 10,
+        tags: ['cool', 'teacher'],
         description: 'New York No. 1 Lake Park',
     },
 ];
@@ -116,19 +115,19 @@ const rowSelection = {
 };
 
 export default function ProductsManage() {
-    const navigate = useNavigate();
-    const addClick = () => {
-        navigate('edit/new');
-    }
-
     return (
         <Card
             title="商品管理列表"
             headStyle={{ fontWeight: 'bold' }}
             extra={
-                <Button type="primary" onClick={addClick} style={{ marginTop: '1px' }}>
-                    新增
-                </Button>
+                <Space size="middle">
+                    <Button type="primary" style={{ marginTop: '1px' }}>
+                        <NavLink to='edit/new'>批量添加</NavLink>
+                    </Button>
+                    <Button type="primary" style={{ marginTop: '1px' }}>
+                        <NavLink to='edit/new'>新增</NavLink>
+                    </Button>
+                </Space>
             }
         >
             <Table
