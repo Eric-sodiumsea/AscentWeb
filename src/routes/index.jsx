@@ -21,12 +21,14 @@ import ProductsManage from '../pages/ProductsManage'
 import ProductItem from '../pages/ProductItem'
 import ProductEdit from '../pages/ProductEdit'
 import Users from '../pages/Users'
-import UserItem from '../pages/UserItem'
+import UserEdit from '../pages/UserEdit'
+import UserEditPower from '../pages/UserEditPower'
 // 普通用户
 import ProductsShow from '../pages/ProductsShow'
 import Cart from '../pages/Cart'
 import Orders from '../pages/Orders'
 import OrderItem from '../pages/OrderItem'
+// import UserEdit from '../pages/UserEdit'
 // 404
 import Error from '../pages/Error'
 
@@ -47,7 +49,7 @@ export const loginRoutes = [
     // 初始页面 跳转至登录
     {
         path: '/',
-        element: <Navigate to="/signin" />
+        element: <Navigate to='/signin' />
     },
 
     // 错误页面
@@ -59,9 +61,10 @@ export const loginRoutes = [
 
 // 管理员
 export const adminRoutes = [
+    // 自动跳转
     {
         path: '/admin',
-        element: <Navigate to="/admin/products" />
+        element: <Navigate to='/admin/products' />
     },
     // （1）商品管理
     {
@@ -73,15 +76,16 @@ export const adminRoutes = [
     },
     // 商品详情
     {
-        path: "/admin/products/detail/:productId", //路径,携带参数: 商品ID
+        path: '/admin/products/detail/:productId', //路径,携带参数: 商品ID
         element: <ProductItem />,
-        isShow: false
+        isShow: false,
     },
     // 商品新增 / 编辑
     {
-        path: "/admin/products/edit/:productId", //路径,携带参数: 商品ID
+        path: '/admin/products/edit/:productId', //路径,携带参数: 商品ID
+        name: '商品编辑',
         element: <ProductEdit />,
-        isShow: false
+        isShow: false,
     },
     // （2）用户管理
     {
@@ -92,10 +96,16 @@ export const adminRoutes = [
         icon: <TeamOutlined />,
     },
     {
-        path: '/admin/users/:userId',
-        name: 'UserItem',
-        element: <UserItem />,
-        isShow: false
+        path: '/admin/users/edit/:userId',
+        name: '个人账号编辑',
+        element: <UserEdit />,
+        isShow: false,
+    },
+    {
+        path: '/admin/users/editpower/:userId',
+        name: '用户账号编辑',
+        element: <UserEditPower />,
+        isShow: false,
     },
     // （3）邮件管理
     {
@@ -114,9 +124,10 @@ export const adminRoutes = [
 
 // 普通用户
 export const userRoutes = [
+    // 自动跳转
     {
         path: '/user',
-        element: <Navigate to="/user/products" />
+        element: <Navigate to='/user/products' />
     },
     // （4）商品浏览和商品查询
     {
@@ -127,10 +138,10 @@ export const userRoutes = [
         icon: <ShopOutlined />,
     },
     {
-        path: "/user/products/detail/:productId", //路径,携带参数: 商品ID
-        name: 'ProductItem',
+        path: '/user/products/detail/:productId', //路径,携带参数: 商品ID
+        name: '商品详情',
         element: <ProductItem />,
-        isShow: false
+        isShow: false,
     },
     // （5）购物车管理
     {
@@ -150,9 +161,16 @@ export const userRoutes = [
     },
     {
         path: '/user/orders/:orderId',
-        name: 'OrderItem',
+        name: '订单详情',
         element: <OrderItem />,
-        isShow: false
+        isShow: false,
+    },
+    // 修改账号信息
+    {
+        path: 'user/edit',
+        name: '用户资料编辑',
+        element: <UserEdit />,
+        isShow: false,
     },
     // 错误页面
     {

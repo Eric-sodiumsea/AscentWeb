@@ -59,7 +59,7 @@ export default function Frame(props) {
                 <Dropdown
                     menu={{ items }}
                 >
-                    <NavLink to="/admin/users/edit">
+                    <NavLink to={"/admin/users/edit/" + isLogined()}>
                         <Space>
                             <Avatar>A</Avatar>
                             <span style={{ color: 'white' }}>用户名</span>

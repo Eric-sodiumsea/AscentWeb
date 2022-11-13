@@ -131,19 +131,6 @@ export default function ProductEdit() {
                 </Form.Item>
 
                 <Form.Item
-                    name="productNumber"
-                    label="商品库存量"
-                    rules={[
-                        {
-                            required: true,
-                            message: '请输入商品库存量！',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
                     name="price"
                     label="商品价格"
                     rules={[
@@ -157,9 +144,22 @@ export default function ProductEdit() {
                 </Form.Item>
 
                 <Form.Item
+                    name="productNumber"
+                    label="商品库存量"
+                    rules={[
+                        {
+                            required: true,
+                            message: '请输入商品库存量！',
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
                     name="category"
                     label="商品分类"
-                    extra="使用空格分割"
+                    extra="使用单个空格分割"
                 >
                     <Input />
                 </Form.Item>
