@@ -124,8 +124,9 @@ export default function ProductsManage() {
     return (
         <Card
             title="商品管理列表"
+            headStyle={{ fontWeight: 'bold' }}
             extra={
-                <Button type="primary" onClick={addClick} >
+                <Button type="primary" onClick={addClick} style={{ marginTop: '1px' }}>
                     新增
                 </Button>
             }
