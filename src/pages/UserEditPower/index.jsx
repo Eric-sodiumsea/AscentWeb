@@ -1,6 +1,17 @@
-import React from 'react'
-import { Card, Form, Input, Button, Radio } from 'antd';
+import React, { useState, useEffect, useRef } from 'react'
+import { PlusOutlined } from '@ant-design/icons';
+import { Card, Form, Input, Button, Radio, Tag, Tooltip } from 'antd';
 import './index.css'
+
+const user = {
+    key: '1',
+    userName: 'A',
+    tel: 32,
+    email: '11@qq.com',
+    address: 'New York No. 1 Lake Park',
+    power: '管理员',
+    products: ['nice', 'developer'],
+}
 
 // 表单元素布局
 const formItemLayout = {
@@ -41,11 +52,58 @@ const tailFormItemLayout = {
 };
 
 export default function UserEditPower() {
+    // 表单提交
     const onFinish = (values) => {
         console.log('Success:', values);
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
+    };
+
+    // 用户分配商品
+    // 分类标签
+    const [tags, setTags] = useState(user.products);
+    const [inputVisible, setInputVisible] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [editInputIndex, setEditInputIndex] = useState(-1);
+    const [editInputValue, setEditInputValue] = useState('');
+    const inputRef = useRef(null);
+    const editInputRef = useRef(null);
+    useEffect(() => {
+        if (inputVisible) {
+            inputRef.current?.focus();
+        }
+    }, [inputVisible]);
+    useEffect(() => {
+        editInputRef.current?.focus();
+    }, [inputValue]);
+    const handleClose = (removedTag) => {
+        const newTags = tags.filter((tag) => tag !== removedTag);
+        console.log(newTags);
+        setTags(newTags);
+    };
+    const showInput = () => {
+        setInputVisible(true);
+    };
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+    };
+    const handleInputConfirm = () => {
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            setTags([...tags, inputValue]);
+        }
+        setInputVisible(false);
+        setInputValue('');
+    };
+    const handleEditInputChange = (e) => {
+        setEditInputValue(e.target.value);
+    };
+    const handleEditInputConfirm = () => {
+        const newTags = [...tags];
+        newTags[editInputIndex] = editInputValue;
+        setTags(newTags);
+        setEditInputIndex(-1);
+        setInputValue('');
     };
 
     return (
@@ -55,10 +113,18 @@ export default function UserEditPower() {
                 name="edit"
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                initialValues={{ username: 'xnh', password: '123', tel: '123456', email: '123@qq.com', address: 'abc', power: 2, products: 'abc 666 999' }}
+                initialValues={{
+                    userName: user.userName,
+                    password: user.password,
+                    tel: user.tel,
+                    email: user.email,
+                    address: user.address,
+                    power: user.power,
+                    products: user.products
+                }}
             >
                 <Form.Item
-                    name="username"
+                    name="userName"
                     label="用户名"
                     rules={[
                         {
@@ -166,9 +232,70 @@ export default function UserEditPower() {
                 <Form.Item
                     name="products"
                     label="管理商品"
-                    extra="输入商品名，若有多个则用一个空格隔开"
                 >
-                    <Input />
+                    <>
+                        {tags.map((tag, index) => {
+                            if (editInputIndex === index) {
+                                return (
+                                    <Input
+                                        ref={editInputRef}
+                                        key={tag}
+                                        size="small"
+                                        className="tag-input"
+                                        value={editInputValue}
+                                        onChange={handleEditInputChange}
+                                        onBlur={handleEditInputConfirm}
+                                        onPressEnter={handleEditInputConfirm}
+                                    />
+                                );
+                            }
+                            const isLongTag = tag.length > 20;
+                            const tagElem = (
+                                <Tag
+                                    className="edit-tag"
+                                    key={tag}
+                                    closable={index !== 0}
+                                    onClose={() => handleClose(tag)}
+                                >
+                                    <span
+                                        onDoubleClick={(e) => {
+                                            if (index !== 0) {
+                                                setEditInputIndex(index);
+                                                setEditInputValue(tag);
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                    >
+                                        {isLongTag ? `${tag.slice(0, 10)}...` : tag}
+                                    </span>
+                                </Tag>
+                            );
+                            return isLongTag ? (
+                                <Tooltip title={tag} key={tag}>
+                                    {tagElem}
+                                </Tooltip>
+                            ) : (
+                                tagElem
+                            );
+                        })}
+                        {inputVisible && (
+                            <Input
+                                ref={inputRef}
+                                type="text"
+                                size="small"
+                                className="tag-input"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                onBlur={handleInputConfirm}
+                                onPressEnter={handleInputConfirm}
+                            />
+                        )}
+                        {!inputVisible && (
+                            <Tag className="site-tag-plus" onClick={showInput}>
+                                <PlusOutlined /> New Tag
+                            </Tag>
+                        )}
+                    </>
                 </Form.Item>
 
                 <Form.Item {...tailFormItemLayout} style={{ textAlign: 'center' }}>
