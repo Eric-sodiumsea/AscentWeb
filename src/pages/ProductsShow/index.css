@@ -1,0 +1,17 @@
+.product img {
+    display: inline-block;
+    width: 100%;
+}
+
+.product .price {
+    color: rgb(24, 144, 255);
+    margin: 0;
+    margin-top: 10px;
+}
+
+.product .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+}
