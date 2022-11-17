@@ -64,6 +64,7 @@ export default function SignUp() {
             navigate('/signin');
         }).catch(error => {
             console.log("注册失败！");
+            message.success("注册失败！");
         })
     };
     const onFinishFailed = (errorInfo) => {

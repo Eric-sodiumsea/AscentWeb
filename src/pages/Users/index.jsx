@@ -1,34 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'
+import axios from '../../utils/axios';
 
 const columns = [
     {
-        title: '用户名',
-        dataIndex: 'userName',
-        render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + index}>{text}</NavLink></Button>,
+        title: '昵称',
+        dataIndex: 'nickname',
+        render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + record.key}>{text}</NavLink></Button>,
         align: 'center',
+        width: '50px',
     },
     {
         title: '手机号',
         dataIndex: 'tel',
         align: 'center',
+        width: '70px',
     },
     {
         title: '邮箱地址',
         dataIndex: 'address',
         align: 'center',
+        width: '90px',
     },
     {
         title: '收货地址',
         dataIndex: 'address',
         align: 'center',
+        width: '90px',
     },
     {
         title: '用户权限',
         dataIndex: 'power',
         render: (text, record, index) => <Button type='link'>{text}</Button>,
         align: 'center',
+        width: '90px',
     },
     {
         title: '管理商品',
@@ -56,7 +62,7 @@ const columns = [
         render: (text, record, index) => (
             <>
                 <Space size='middle'>
-                    <Button><NavLink to={'/admin/users/editpower/' + index}>修改</NavLink></Button>
+                    <Button><NavLink to={'/admin/users/editpower/' + record.key}>修改</NavLink></Button>
                     <Popconfirm
                         title='确认删除此项？'
                         okText='确定'
@@ -70,35 +76,6 @@ const columns = [
             </>
         ),
         align: 'center',
-    },
-];
-const data = [
-    {
-        key: '1',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '管理员',
-        products: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '普通用户',
-        products: ['nice', 'developer'],
-    },
-    {
-        key: '3',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '普通用户',
-        products: ['nice', 'developer'],
     },
 ];
 
@@ -116,6 +93,34 @@ const rowSelection = {
 
 export default function Users() {
     const navigate = useNavigate();
+
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        axios.get('/user?methodName=findUserList')
+            .then((res) => {
+                console.log("查询成功！");
+                console.log(res.data);
+                setData(res.data.map((user) => {
+                    return {
+                        key: user.id,
+                        nickname: user.nickname,
+                        tel: user.tel,
+                        email: user.email,
+                        address: user.address,
+                        power: user.superuser === "1" ? "普通用户" : "管理员",
+                        products: (
+                            user.productList.map(product => {
+                                return product.productname
+                            }))
+                    }
+                }))
+            }).catch(error => {
+                console.log("查询失败！");
+            })
+    }, []);
+
+    // 新增用户按钮
     const addClick = () => {
         navigate('editpower/new');
     }
