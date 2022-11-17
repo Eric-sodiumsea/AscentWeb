@@ -1,8 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
-import { Card, Form, Input, Button } from 'antd';
-
+import { Card, Form, Input, Button, message } from 'antd';
 import './index.css'
+import axios from '../../utils/axios';
 
 // 表单元素布局
 const formItemLayout = {
@@ -43,8 +44,27 @@ const tailFormItemLayout = {
 };
 
 export default function SignUp() {
+    const navigate = useNavigate();
+
     const onFinish = (values) => {
         console.log('Success:', values);
+        axios.post('/usrlogin', {
+            "methodName": "register",
+            "username": values.username,
+            "password": values.password,
+            "nickname": values.nickname,
+            "tel": values.tel,
+            "email": values.email,
+            "address": values.address
+        }, {
+            headers: { 'Content-Type': 'application/json;charset=utf-8' }
+        }).then((res) => {
+            console.log("注册成功！");
+            message.success("注册成功！");
+            navigate('/signin');
+        }).catch(error => {
+            console.log("注册失败！");
+        })
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -103,6 +123,19 @@ export default function SignUp() {
                     ]}
                 >
                     <Input.Password />
+                </Form.Item>
+
+                <Form.Item
+                    name="nickname"
+                    label="昵称"
+                    rules={[
+                        {
+                            required: true,
+                            message: '请输入昵称！',
+                        },
+                    ]}
+                >
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
