@@ -10,7 +10,7 @@ import { removeToken, isLogined } from '../../utils/auth'
 
 const items = [
     {
-        label: (<a href="/">修改账号信息</a>),
+        label: (<NavLink to="/admin/users/edit/0">修改账号信息</NavLink>),
         key: '0',
     },
     {

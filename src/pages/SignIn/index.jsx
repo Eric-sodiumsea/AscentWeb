@@ -1,24 +1,55 @@
+/**
+ * 登录
+ */
+
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Card, Button, Checkbox, Form, Input } from 'antd';
+import { Card, Button, Checkbox, Form, Input, message } from 'antd';
 import { NavLink } from 'react-router-dom'
 import { getToken, setToken } from '../../utils/auth'
 import './index.css'
+import axios from '../../utils/axios';
 
 export default function SignIn() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // if (getToken())
-        console.log(getToken());
+        if (getToken()) {
+            axios.get('/user?methodName=findSuperuserByUserId&id=' + getToken())
+                .then(res => {
+                    console.log(res)
+                    if (res.data.superuser === "admin") {
+                        navigate('/admin');
+                    } else if (res.data.superuser === "user") {
+                        navigate('/user');
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+        }
     }, []);
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-        setToken(values.username);
-        // setToken(userId) // 将用户ID设为token
-        navigate('/admin');
+        axios.post('/usrlogin', {
+            "methodName": "login",
+            'username': values.username,
+            'password': values.password,
+        }, {
+            headers: { 'Content-Type': 'application/json;charset=utf-8' }
+        }).then((res) => {
+            console.log(res);
+            setToken(res.data.userId);
+            if (res.data.superuser === "admin") {
+                navigate('/admin');
+            } else if (res.data.superuser === "user") {
+                navigate('/user');
+            } else {
+                message.error('用户名或密码错误！');
+            }
+        }).catch(error => {
+            console.log(error);
+        })
     };
 
     return (
