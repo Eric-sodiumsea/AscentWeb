@@ -16,12 +16,12 @@ export default function SignIn() {
 
     useEffect(() => {
         if (getToken()) {
-            axios.get('/user?methodName=findSuperuserByUserId&id=' + getToken())
+            axios.get('/user?methodName=findUserById&id=' + getToken())
                 .then(res => {
                     console.log(res)
-                    if (res.data.superuser === "admin") {
+                    if (res.data.superuser === "2" || res.data.superuser === "3") {
                         navigate('/admin');
-                    } else if (res.data.superuser === "user") {
+                    } else if (res.data.superuser === "1") {
                         navigate('/user');
                     }
                 }).catch(err => {

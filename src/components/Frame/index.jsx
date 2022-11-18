@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { Layout, Menu, Dropdown, Space, Avatar } from 'antd'
 import { DownOutlined } from '@ant-design/icons';
@@ -6,11 +6,12 @@ import { adminRoutes, userRoutes } from '../../routes'
 import { useNavigate } from 'react-router-dom'
 import logo from './logo.png'
 import './index.css'
-import { removeToken, isLogined } from '../../utils/auth'
+import { getToken, removeToken, isLogined } from '../../utils/auth'
+import axios from '../../utils/axios';
 
 const items = [
     {
-        label: (<NavLink to="/admin/users/edit/0">修改账号信息</NavLink>),
+        label: (<NavLink to={"/admin/users/edit/" + getToken()} >修改账号信息</NavLink>),
         key: '0',
     },
     {
@@ -25,30 +26,52 @@ const items = [
 ];
 
 export default function Frame(props) {
-    const { Header, Content, Sider } = Layout;
-    let routes;
-    if (props.url === "admin") {
-        routes = adminRoutes;
-    } else {
-        routes = userRoutes
-    }
-    const isShowRoutes = routes.filter(route => route.isShow);
-    const SidebarItems = isShowRoutes.map(route => {
-        return {
-            key: route.path,
-            icon: route.icon,
-            label: route.name,
-        }
-    })
 
     let navigate = new useNavigate();
 
-    // 判断是否登录，若还没登录，则重定向回登录页
+    const [routes, setRoutes] = useState({});
+    const [superuser, setSuperuser] = useState("");
+    const [SidebarItems, setSidebarItems] = useState([]);
+
     useEffect(() => {
+        // 判断是否登录，若还没登录，则重定向回登录页
         if (!isLogined()) {
             navigate('/signin');
+        } else {
+            // 若已经登录，则判断该用户是管理员还是普通用户
+            axios.get('/user?methodName=findUserById&id=' + getToken())
+                .then(res => {
+                    console.log("findUserById  ", res);
+                    if (res.data.superuser === "2" || res.data.superuser === "3") {
+                        setRoutes(adminRoutes);
+                        const isShowRoutes = adminRoutes.filter(route => route.isShow);
+                        setSidebarItems(isShowRoutes.map(route => {
+                            return {
+                                key: route.path,
+                                icon: route.icon,
+                                label: route.name,
+                            }
+                        }))
+                        setSuperuser("admin");
+                    } else if (res.data.superuser === "1") {
+                        setRoutes(userRoutes);
+                        const isShowRoutes = userRoutes.filter(route => route.isShow);
+                        setSidebarItems(isShowRoutes.map(route => {
+                            return {
+                                key: route.path,
+                                icon: route.icon,
+                                label: route.name,
+                            }
+                        }))
+                        setSuperuser("user");
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
         }
-    }, [])
+    }, []);
+
+    const { Header, Content, Sider } = Layout;
 
     return (
         <Layout>
@@ -59,7 +82,7 @@ export default function Frame(props) {
                 <Dropdown
                     menu={{ items }}
                 >
-                    <NavLink to={"/admin/users/edit/" + isLogined()}>
+                    <NavLink to={superuser === "admin" ? "/admin/users/edit/" + getToken() : "/users/edit"}>
                         <Space>
                             <Avatar>A</Avatar>
                             <span style={{ color: 'white' }}>用户名</span>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Form, Card, Input, Button } from 'antd'
+import { Form, Card, Input, Button, message } from 'antd'
+import axios from '../../utils/axios';
 
 // 表单元素布局
 const formItemLayout = {
@@ -39,15 +40,50 @@ const tailFormItemLayout = {
     },
 };
 
+// Form表单初始化值
+let data = {};
+axios.get('/mail?methodName=findMail')
+    .then(res => {
+        console.log("mail: ", res.data);
+        data.emailAddress = res.data.fromaddress;
+        data.emailPassword = res.data.frompassword;
+        data.receiptEmail = res.data.toaddress;
+    }).catch(err => {
+        console.log(err);
+    });
+
 export default function Email() {
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        axios.post('/mail', {
+            "methodName": "saveMail",
+            "fromaddress": values.emailAddress,
+            "frompassword": values.emailPassword,
+            "toaddress": values.receiptEmail
+        }, {
+            headers: { 'Content-Type': 'application/json;charset=utf-8' }
+        }).then((res) => {
+            console.log("修改成功！");
+            message.success("修改成功！");
+        }).catch(error => {
+            console.log("修改失败！");
+            message.success("修改失败！");
+        })
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     return (
         <Card title="管理员邮件设置" bordered={false} hoverable={true} headStyle={{ textAlign: 'center', fontWeight: 'bold' }} >
             <Form
                 {...formItemLayout}
                 name="edit"
+                initialValues={data}
+                onFinish={onFinish}
             >
                 <Form.Item
-                    name="email-address"
+                    name="emailAddress"
                     label="邮箱地址"
                     rules={[
                         {
@@ -64,7 +100,7 @@ export default function Email() {
                 </Form.Item>
 
                 <Form.Item
-                    name="email-password"
+                    name="emailPassword"
                     label="邮箱密码"
                     rules={[
                         {
@@ -77,7 +113,7 @@ export default function Email() {
                 </Form.Item>
 
                 <Form.Item
-                    name="receipt-email"
+                    name="receiptEmail"
                     label="收件邮箱"
                     rules={[
                         {

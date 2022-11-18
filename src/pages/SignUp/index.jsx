@@ -59,9 +59,14 @@ export default function SignUp() {
         }, {
             headers: { 'Content-Type': 'application/json;charset=utf-8' }
         }).then((res) => {
-            console.log("注册成功！");
-            message.success("注册成功！");
-            navigate('/signin');
+            console.log(res);
+            if (res.data.msg === "fail") {
+                message.error("注册失败！该用户名已被注册！")
+                console.log("注册失败！该用户名已被注册！");
+            } else if (res.data.msg === "success") {
+                message.success("注册成功！");
+                navigate('/signin');
+            }
         }).catch(error => {
             console.log("注册失败！");
             message.success("注册失败！");
