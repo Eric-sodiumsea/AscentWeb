@@ -44,7 +44,6 @@ const tailFormItemLayout = {
 let data = {};
 axios.get('/mail?methodName=findMail')
     .then(res => {
-        console.log("mail: ", res.data);
         data.emailAddress = res.data.fromaddress;
         data.emailPassword = res.data.frompassword;
         data.receiptEmail = res.data.toaddress;
@@ -54,7 +53,6 @@ axios.get('/mail?methodName=findMail')
 
 export default function Email() {
     const onFinish = (values) => {
-        console.log('Success:', values);
         axios.post('/mail', {
             "methodName": "saveMail",
             "fromaddress": values.emailAddress,
@@ -63,15 +61,17 @@ export default function Email() {
         }, {
             headers: { 'Content-Type': 'application/json;charset=utf-8' }
         }).then((res) => {
-            console.log("修改成功！");
-            message.success("修改成功！");
+            if (res.data.msg === "fail") {
+                message.success("保存失败！");
+            } else {
+                message.success("保存成功！");
+            }
         }).catch(error => {
-            console.log("修改失败！");
-            message.success("修改失败！");
+            message.success("保存失败！");
         })
     };
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        message.warn("请输入完整信息！")
     };
 
     return (
@@ -81,6 +81,7 @@ export default function Email() {
                 name="edit"
                 initialValues={data}
                 onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
             >
                 <Form.Item
                     name="emailAddress"

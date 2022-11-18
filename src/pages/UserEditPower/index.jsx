@@ -1,17 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { PlusOutlined } from '@ant-design/icons';
-import { Card, Form, Input, Button, Radio, Tag, Tooltip } from 'antd';
+import { Card, Form, Input, Button, Radio, Tag, Tooltip, message } from 'antd';
 import './index.css'
-
-const user = {
-    key: '1',
-    userName: 'A',
-    tel: 32,
-    email: '11@qq.com',
-    address: 'New York No. 1 Lake Park',
-    power: '管理员',
-    products: ['nice', 'developer'],
-}
+import axios from '../../utils/axios';
 
 // 表单元素布局
 const formItemLayout = {
@@ -52,17 +44,8 @@ const tailFormItemLayout = {
 };
 
 export default function UserEditPower() {
-    // 表单提交
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     // 用户分配商品
-    // 分类标签
-    const [tags, setTags] = useState(user.products);
+    const [tags, setTags] = useState([]);
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -106,25 +89,115 @@ export default function UserEditPower() {
         setInputValue('');
     };
 
+    // Form表单初始化值
+    const [form] = Form.useForm();
+    const [editTitle, setEditTitle] = useState("");
+    const { userId } = useParams();
+    useEffect(() => {
+        // 判断是新增用户还是修改用户
+        if (userId === "new") {
+            // 新增用户
+            setEditTitle("新增用户");
+        } else {
+            // 修改用户
+            setEditTitle("编辑用户信息");
+            axios.get('/user?methodName=findUserById&id=' + userId)
+                .then((res) => {
+                    form.setFieldsValue({
+                        username: res.data.username,
+                        password: res.data.password,
+                        passwordAgain: res.data.password,
+                        nickname: res.data.nickname,
+                        tel: res.data.tel,
+                        email: res.data.email,
+                        address: res.data.address,
+                        superuser: res.data.superuser === "3" ? "2" : res.data.superuser,
+                    })
+                    setTags(res.data.productList.map(product => {
+                        return product.productname;
+                    }))
+                }).catch(error => {
+                    console.log(error);
+                })
+        }
+    }, []);
+
+    const navigate = useNavigate();
+
+    // 表单提交
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        if (userId === "new") {
+            // 新增用户
+            axios.post('/user', {
+                "methodName": "addUser",
+                "username": values.username,
+                "password": values.password,
+                "nickname": values.nickname,
+                "tel": values.tel,
+                "email": values.email,
+                "address": values.address,
+                "superuser": values.superuser,
+                "products": tags,
+                "delsoft": "0"
+            }, {
+                headers: { 'Content-Type': 'application/json;charset=utf-8' }
+            }).then((res) => {
+                if (res.data.msg === "fail") {
+                    message.success("保存失败！该用户名已存在！");
+                }
+                else {
+                    navigate('/admin/users');
+                    message.success("保存成功！");
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+        } else {
+            // 修改用户
+            axios.post('/user', {
+                "methodName": "updateUserByAdmin",
+                "id": userId,
+                "username": values.username,
+                "password": values.password,
+                "nickname": values.nickname,
+                "tel": values.tel,
+                "email": values.email,
+                "address": values.address,
+                "superuser": values.superuser,
+                "products": tags,
+                "delsoft": "0"
+            }, {
+                headers: { 'Content-Type': 'application/json;charset=utf-8' }
+            }).then((res) => {
+                if (res.data.msg === "fail") {
+                    message.success("保存失败！该用户名已存在！");
+                }
+                else {
+                    navigate('/admin/users');
+                    message.success("保存成功！");
+                }
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+
+    };
+    const onFinishFailed = (errorInfo) => {
+        message.error("保存失败！请输入完整信息！");
+    };
+
     return (
-        <Card title="用户账号编辑" className='signup-form' headStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: '20px' }} hoverable >
+        <Card title={editTitle} className='signup-form' headStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: '20px' }} hoverable >
             <Form
+                form={form}
                 {...formItemLayout}
                 name="edit"
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                initialValues={{
-                    userName: user.userName,
-                    password: user.password,
-                    tel: user.tel,
-                    email: user.email,
-                    address: user.address,
-                    power: user.power,
-                    products: user.products
-                }}
             >
                 <Form.Item
-                    name="userName"
+                    name="username"
                     label="用户名"
                     rules={[
                         {
@@ -150,7 +223,7 @@ export default function UserEditPower() {
                 </Form.Item>
 
                 <Form.Item
-                    name="password-again"
+                    name="passwordAgain"
                     label="确认密码"
                     rules={[
                         {
@@ -168,6 +241,19 @@ export default function UserEditPower() {
                     ]}
                 >
                     <Input.Password />
+                </Form.Item>
+
+                <Form.Item
+                    name="nickname"
+                    label="昵称"
+                    rules={[
+                        {
+                            required: true,
+                            message: '请输入昵称！',
+                        },
+                    ]}
+                >
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
@@ -214,7 +300,7 @@ export default function UserEditPower() {
                 </Form.Item>
 
                 <Form.Item
-                    name="power"
+                    name="superuser"
                     label="用户权限"
                     rules={[
                         {
@@ -224,8 +310,8 @@ export default function UserEditPower() {
                     ]}
                 >
                     <Radio.Group name="radiogroup">
-                        <Radio value={1}>普通用户</Radio>
-                        <Radio value={2}>管理员</Radio>
+                        <Radio value="1">普通用户</Radio>
+                        <Radio value="2">管理员</Radio>
                     </Radio.Group>
                 </Form.Item>
 
@@ -254,7 +340,7 @@ export default function UserEditPower() {
                                 <Tag
                                     className="edit-tag"
                                     key={tag}
-                                    closable={index !== 0}
+                                    closable
                                     onClose={() => handleClose(tag)}
                                 >
                                     <span
@@ -292,7 +378,7 @@ export default function UserEditPower() {
                         )}
                         {!inputVisible && (
                             <Tag className="site-tag-plus" onClick={showInput}>
-                                <PlusOutlined /> New Tag
+                                <PlusOutlined /> 新增管理商品
                             </Tag>
                         )}
                     </>

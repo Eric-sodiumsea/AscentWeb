@@ -117,7 +117,7 @@ const rowSelection = {
 export default function ProductsManage() {
     return (
         <Card
-            title="商品管理列表"
+            title="商品管理列表（未实现！）"
             headStyle={{ fontWeight: 'bold' }}
             extra={
                 <Space size="middle">

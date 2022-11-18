@@ -1,6 +1,9 @@
-import React from 'react'
-import { Card, Form, Input, Button } from 'antd';
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { Card, Form, Input, Button, message } from 'antd';
 import './index.css'
+import axios from '../../utils/axios';
+import { getToken } from '../../utils/auth'
 
 // 表单元素布局
 const formItemLayout = {
@@ -41,21 +44,66 @@ const tailFormItemLayout = {
 };
 
 export default function UserEdit() {
+    // Form表单初始化值
+    const [form] = Form.useForm();
+    const { userId } = useParams();
+    useEffect(() => {
+        axios.get('/user?methodName=findUserById&id=' + getToken())
+            .then((res) => {
+                form.setFieldsValue({
+                    username: res.data.username,
+                    password: res.data.password,
+                    passwordAgain: res.data.password,
+                    nickname: res.data.nickname,
+                    tel: res.data.tel,
+                    email: res.data.email,
+                    address: res.data.address,
+                })
+            }).catch(error => {
+                console.log("查询失败！");
+            })
+    }, []);
+
+    console.log("form: ", form)
+
+    // 表单提交
     const onFinish = (values) => {
         console.log('Success:', values);
+        // 修改用户
+        axios.post('/user', {
+            "methodName": "updateUser",
+            "id": userId,
+            "username": values.username,
+            "password": values.password,
+            "nickname": values.nickname,
+            "tel": values.tel,
+            "email": values.email,
+            "address": values.address,
+        }, {
+            headers: { 'Content-Type': 'application/json;charset=utf-8' }
+        }).then((res) => {
+            if (res.data.msg === "fail") {
+                message.success("保存失败！该用户名已存在！");
+            }
+            else {
+                message.success("保存成功！");
+            }
+        }).catch(error => {
+            console.log(error);
+        })
     };
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        message.error("保存失败！请输入完整信息！");
     };
 
     return (
         <Card title="个人账号编辑" className='signup-form' headStyle={{ textAlign: 'center', fontWeight: 'bold', fontSize: '20px' }} hoverable >
             <Form
+                form={form}
                 {...formItemLayout}
                 name="edit"
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                initialValues={{ username: 'xnh', password: '123', tel: '123456', email: '123@qq.com', address: 'abc' }}
             >
                 <Form.Item
                     name="username"
@@ -84,7 +132,7 @@ export default function UserEdit() {
                 </Form.Item>
 
                 <Form.Item
-                    name="password-again"
+                    name="passwordAgain"
                     label="确认密码"
                     rules={[
                         {
@@ -102,6 +150,19 @@ export default function UserEdit() {
                     ]}
                 >
                     <Input.Password />
+                </Form.Item>
+
+                <Form.Item
+                    name="nickname"
+                    label="昵称"
+                    rules={[
+                        {
+                            required: true,
+                            message: '请输入昵称！',
+                        },
+                    ]}
+                >
+                    <Input />
                 </Form.Item>
 
                 <Form.Item
