@@ -19,7 +19,7 @@ export default function Frame(props) {
     if (props.url === "admin") {
         routes = adminRoutes;
     } else {
-        routes = userRoutes
+        routes = userRoutes;
     }
     const isShowRoutes = routes.filter(route => route.isShow);
     const SidebarItems = isShowRoutes.map(route => {
@@ -41,8 +41,16 @@ export default function Frame(props) {
             axios.get('/user?methodName=findUserById&id=' + getToken())
                 .then(res => {
                     if (res.data.superuser === "2" || res.data.superuser === "3") {
+                        // 该用户为管理员，在前台页面时有权访问后台页面
+                        if (props.url === "user") {
+                            routes[6].isShow = true;
+                        }
                         setSuperuser("admin");
                     } else if (res.data.superuser === "1") {
+                        // 该用户为普通用户，无权访问后台页面，需跳转回前台页面
+                        if (props.url === "admin") {
+                            navigate('/user/products');
+                        }
                         setSuperuser("user");
                     }
                 }).catch(err => {

@@ -1,3 +1,7 @@
+/**
+ * 邮件管理
+ */
+
 import React from 'react'
 import { Form, Card, Input, Button, message } from 'antd'
 import axios from '../../utils/axios';
@@ -52,7 +56,9 @@ axios.get('/mail?methodName=findMail')
     });
 
 export default function Email() {
+    // 表单提交
     const onFinish = (values) => {
+        // 保存邮件
         axios.post('/mail', {
             "methodName": "saveMail",
             "fromaddress": values.emailAddress,
@@ -65,6 +71,8 @@ export default function Email() {
                 message.success("保存失败！");
             } else {
                 message.success("保存成功！");
+                // 刷新页面
+                window.location.reload();
             }
         }).catch(error => {
             message.success("保存失败！");

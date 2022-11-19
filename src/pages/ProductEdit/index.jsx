@@ -1,3 +1,7 @@
+/**
+ * 商品编辑
+ */
+
 import React, { useState, useEffect, useRef } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
 import { Card, Form, Upload, Modal, Input, Tooltip, Tag, Button } from 'antd';

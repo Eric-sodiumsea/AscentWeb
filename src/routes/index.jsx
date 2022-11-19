@@ -1,9 +1,10 @@
 /**
+ * 路由表
  * （0）登录、注册
  *  管理员
- * （1）邮件管理
- * （2）商品管理
- * （3）用户管理
+ * （1）用户管理
+ * （2）邮件管理
+ * （3）商品管理
  *  普通用户
  * （4）商品浏览和商品查询
  * （5）购物车管理
@@ -33,7 +34,7 @@ import OrderItem from '../pages/OrderItem'
 import Error from '../pages/Error'
 
 // icon 图表
-import { ShoppingCartOutlined /* 购物车 */, TeamOutlined /* 用户管理 */, MailOutlined /* 邮件管理 */, ShoppingOutlined /* 商品管理 */, ShopOutlined /* 商品浏览 */ } from '@ant-design/icons'
+import { ShoppingCartOutlined /* 购物车 */, TeamOutlined /* 用户管理 */, MailOutlined /* 邮件管理 */, ShoppingOutlined /* 商品管理 */, ShopOutlined /* 商品浏览 */, BankOutlined /* 前台页面 */, FormOutlined /* 后天页面 */ } from '@ant-design/icons'
 
 // （0）登录、注册（分管理员和普通用户 -- 选择）
 export const loginRoutes = [
@@ -64,9 +65,40 @@ export const adminRoutes = [
     // 自动跳转
     {
         path: '/admin',
-        element: <Navigate to='/admin/products' />
+        element: <Navigate to='/admin/users' />
     },
-    // （1）商品管理
+
+    // （1）用户管理
+    {
+        path: '/admin/users',
+        name: '用户管理',
+        element: <Users />,
+        isShow: true,
+        icon: <TeamOutlined />,
+    },
+    {
+        path: '/admin/users/edit/:userId',
+        name: '个人账号编辑',
+        element: <UserEdit />,
+        isShow: false,
+    },
+    {
+        path: '/admin/users/editpower/:userId',
+        name: '用户账号编辑',
+        element: <UserEditPower />,
+        isShow: false,
+    },
+
+    // （2）邮件管理
+    {
+        path: '/admin/email',
+        name: '邮件管理',
+        element: <Email />,
+        isShow: true,
+        icon: <MailOutlined />,
+    },
+
+    // （3）商品管理
     {
         path: '/admin/products',
         name: '商品管理',
@@ -87,34 +119,16 @@ export const adminRoutes = [
         element: <ProductEdit />,
         isShow: false,
     },
-    // （2）用户管理
+
+    // 跳转至前台页面
     {
-        path: '/admin/users',
-        name: '用户管理',
-        element: <Users />,
+        path: '/user/products',
+        name: '跳转至前台页面',
+        element: <ProductsShow />,
         isShow: true,
-        icon: <TeamOutlined />,
+        icon: <BankOutlined />,
     },
-    {
-        path: '/admin/users/edit/:userId',
-        name: '个人账号编辑',
-        element: <UserEdit />,
-        isShow: false,
-    },
-    {
-        path: '/admin/users/editpower/:userId',
-        name: '用户账号编辑',
-        element: <UserEditPower />,
-        isShow: false,
-    },
-    // （3）邮件管理
-    {
-        path: '/admin/email',
-        name: '邮件管理',
-        element: <Email />,
-        isShow: true,
-        icon: <MailOutlined />,
-    },
+
     // 错误页面
     {
         path: '*',
@@ -129,6 +143,7 @@ export const userRoutes = [
         path: '/user',
         element: <Navigate to='/user/products' />
     },
+
     // （4）商品浏览和商品查询
     {
         path: '/user/products',
@@ -143,6 +158,7 @@ export const userRoutes = [
         element: <ProductItem />,
         isShow: false,
     },
+
     // （5）购物车管理
     {
         path: '/user/cart',
@@ -151,6 +167,7 @@ export const userRoutes = [
         isShow: true,
         icon: <ShoppingCartOutlined />,
     },
+
     // （6）订单管理
     {
         path: '/user/orders',
@@ -165,6 +182,16 @@ export const userRoutes = [
         element: <OrderItem />,
         isShow: false,
     },
+
+    // 跳转至后台页面
+    {
+        path: '/admin/users',
+        name: '跳转至后台页面',
+        element: <Users />,
+        isShow: false,
+        icon: <FormOutlined />,
+    },
+
     // 修改账号信息
     {
         path: 'user/edit',

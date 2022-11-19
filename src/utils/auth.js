@@ -1,3 +1,7 @@
+/**
+ * 网页token值
+ */
+
 export function getToken() {
     return localStorage.getItem('token');
 }

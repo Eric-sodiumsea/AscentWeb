@@ -1,3 +1,7 @@
+/**
+ * 用户管理
+ */
+
 import React, { useEffect, useState } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm, message } from 'antd'
@@ -55,6 +59,7 @@ export default function Users() {
         navigate('editpower/' + userId)
     }
 
+    // 删除用户按钮
     const deleteUser = (userId) => {
         axios.get('/user?methodName=deleteUser&id=' + userId)
             .then((res) => {
@@ -76,39 +81,39 @@ export default function Users() {
             dataIndex: 'username',
             render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + record.key}>{text}</NavLink></Button>,
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '昵称',
             dataIndex: 'nickname',
             render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + record.key}>{text}</NavLink></Button>,
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '手机号',
             dataIndex: 'tel',
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '邮箱地址',
             dataIndex: 'address',
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '收货地址',
             dataIndex: 'address',
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '用户权限',
             dataIndex: 'power',
             render: (text, record, index) => <Button type='link'>{text}</Button>,
             align: 'center',
-            width: '90px',
+            minWidth: '90px',
         },
         {
             title: '管理商品',

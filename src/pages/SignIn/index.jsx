@@ -20,9 +20,9 @@ export default function SignIn() {
                 .then(res => {
                     console.log(res)
                     if (res.data.superuser === "2" || res.data.superuser === "3") {
-                        navigate('/admin');
+                        navigate('/admin/users');
                     } else if (res.data.superuser === "1") {
-                        navigate('/user');
+                        navigate('/user/products');
                     }
                 }).catch(err => {
                     console.log(err);
@@ -41,9 +41,9 @@ export default function SignIn() {
             console.log(res);
             setToken(res.data.userId);
             if (res.data.superuser === "admin") {
-                navigate('/admin');
+                navigate('/admin/users');
             } else if (res.data.superuser === "user") {
-                navigate('/user');
+                navigate('/user/products');
             } else {
                 message.error('用户名或密码错误！');
             }

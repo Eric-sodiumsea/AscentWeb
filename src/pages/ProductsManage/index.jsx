@@ -1,3 +1,7 @@
+/**
+ * 商品管理
+ */
+
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'

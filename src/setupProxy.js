@@ -1,4 +1,7 @@
-// const proxy = require('http-proxy-middleware');
+/**
+ * 转发服务器
+ */
+
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function (app) {
