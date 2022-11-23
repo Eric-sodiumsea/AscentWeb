@@ -1,3 +1,7 @@
+/**
+ * 入口文件
+ */
+
 import React from 'react'
 import { useRoutes } from 'react-router-dom'
 import Frame from './components/Frame';
