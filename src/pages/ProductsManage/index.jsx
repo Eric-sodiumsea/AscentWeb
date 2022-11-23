@@ -1,3 +1,7 @@
+/**
+ * 商品管理
+ */
+
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'
@@ -117,7 +121,7 @@ const rowSelection = {
 export default function ProductsManage() {
     return (
         <Card
-            title="商品管理列表"
+            title="商品管理列表（未实现！）"
             headStyle={{ fontWeight: 'bold' }}
             extra={
                 <Space size="middle">

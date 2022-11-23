@@ -1,5 +1,5 @@
 # AscentWeb
-AscentWeb 医药商务系统
+AscentWeb 医药商务系统 react + antd；java + dao + service + servlet；mysql
 
 ## 后端
 ### 后端目录结构

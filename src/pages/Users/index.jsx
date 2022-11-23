@@ -1,106 +1,11 @@
-import React from 'react'
-import { useNavigate, NavLink } from 'react-router-dom';
-import { Card, Table, Button, Tag, Space, Popconfirm } from 'antd'
+/**
+ * 用户管理
+ */
 
-const columns = [
-    {
-        title: '用户名',
-        dataIndex: 'userName',
-        render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + index}>{text}</NavLink></Button>,
-        align: 'center',
-    },
-    {
-        title: '手机号',
-        dataIndex: 'tel',
-        align: 'center',
-    },
-    {
-        title: '邮箱地址',
-        dataIndex: 'address',
-        align: 'center',
-    },
-    {
-        title: '收货地址',
-        dataIndex: 'address',
-        align: 'center',
-    },
-    {
-        title: '用户权限',
-        dataIndex: 'power',
-        render: (text, record, index) => <Button type='link'>{text}</Button>,
-        align: 'center',
-    },
-    {
-        title: '管理商品',
-        dataIndex: 'products',
-        render: (_, { products }) => (
-            <>
-                {products.map((product) => {
-                    let color = product.length > 5 ? 'geekblue' : 'green';
-                    if (product === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={product}>
-                            {product.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-        align: 'center',
-    },
-    {
-        title: '操作',
-        dataIndex: 'action',
-        render: (text, record, index) => (
-            <>
-                <Space size='middle'>
-                    <Button><NavLink to={'/admin/users/editpower/' + index}>修改</NavLink></Button>
-                    <Popconfirm
-                        title='确认删除此项？'
-                        okText='确定'
-                        onConfirm={() => { console.log('用户确认删除！') }}
-                        cancelText='取消'
-                        onCancel={() => { console.log('用户取消删除！') }}
-                    >
-                        <Button>删除</Button>
-                    </Popconfirm>
-                </Space>
-            </>
-        ),
-        align: 'center',
-    },
-];
-const data = [
-    {
-        key: '1',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '管理员',
-        products: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '普通用户',
-        products: ['nice', 'developer'],
-    },
-    {
-        key: '3',
-        userName: 'A',
-        tel: 32,
-        email: '11@qq.com',
-        address: 'New York No. 1 Lake Park',
-        power: '普通用户',
-        products: ['nice', 'developer'],
-    },
-];
+import React, { useEffect, useState } from 'react'
+import { useNavigate, NavLink } from 'react-router-dom';
+import { Card, Table, Button, Tag, Space, Popconfirm, message } from 'antd'
+import axios from '../../utils/axios';
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
@@ -116,9 +21,142 @@ const rowSelection = {
 
 export default function Users() {
     const navigate = useNavigate();
+
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        axios.get('/user?methodName=findUserList')
+            .then((res) => {
+                console.log("查询成功！");
+                console.log(res.data);
+                setData(res.data.map((user) => {
+                    return {
+                        key: user.id,
+                        username: user.username,
+                        nickname: user.nickname,
+                        tel: user.tel,
+                        email: user.email,
+                        address: user.address,
+                        power: user.superuser === "1" ? "普通用户" : "管理员",
+                        products: (
+                            user.productList.map(product => {
+                                return product.productname
+                            }))
+                    }
+                }))
+            }).catch(error => {
+                console.log("查询失败！");
+            })
+    }, []);
+
+    // 新增用户按钮
     const addClick = () => {
         navigate('editpower/new');
     }
+
+    // 修改用户按钮
+    const editClick = (userId) => {
+        navigate('editpower/' + userId)
+    }
+
+    // 删除用户按钮
+    const deleteUser = (userId) => {
+        axios.get('/user?methodName=deleteUser&id=' + userId)
+            .then((res) => {
+                if (res.data.msg === "fail") {
+                    message.error("删除失败！")
+                }
+                else {
+                    window.location.reload();
+                    message.success("删除成功！")
+                }
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
+    const columns = [
+        {
+            title: '用户名',
+            dataIndex: 'username',
+            render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + record.key}>{text}</NavLink></Button>,
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '昵称',
+            dataIndex: 'nickname',
+            render: (text, record, index) => <Button type='link'><NavLink to={'/admin/users/editpower/' + record.key}>{text}</NavLink></Button>,
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '手机号',
+            dataIndex: 'tel',
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '邮箱地址',
+            dataIndex: 'address',
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '收货地址',
+            dataIndex: 'address',
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '用户权限',
+            dataIndex: 'power',
+            render: (text, record, index) => <Button type='link'>{text}</Button>,
+            align: 'center',
+            minWidth: '90px',
+        },
+        {
+            title: '管理商品',
+            dataIndex: 'products',
+            render: (_, { products }) => (
+                <>
+                    {products.map((product) => {
+                        let color = product.length > 5 ? 'geekblue' : 'green';
+                        if (product === 'loser') {
+                            color = 'volcano';
+                        }
+                        return (
+                            <Tag color={color} key={product}>
+                                {product.toUpperCase()}
+                            </Tag>
+                        );
+                    })}
+                </>
+            ),
+            align: 'center',
+        },
+        {
+            title: '操作',
+            dataIndex: 'action',
+            render: (text, record, index) => (
+                <>
+                    <Space size='middle'>
+                        <Button onClick={() => editClick(record.key)}>修改</Button>
+                        <Popconfirm
+                            title='确认删除此项？'
+                            okText='确定'
+                            onConfirm={() => { deleteUser(record.key) }}
+                            cancelText='取消'
+                            onCancel={() => { message.success("已取消删除！") }}
+                        >
+                            <Button>删除</Button>
+                        </Popconfirm>
+                    </Space>
+                </>
+            ),
+            align: 'center',
+        },
+    ];
 
     return (
         <Card

@@ -1,3 +1,7 @@
+/**
+ * 错误页面
+ */
+
 import React from 'react'
 
 export default function Error() {
