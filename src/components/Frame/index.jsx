@@ -32,6 +32,8 @@ export default function Frame(props) {
 
     // 判断当前账户是管理员还是普通用户
     const [superuser, setSuperuser] = useState("");
+    // 记录用户名
+    const [username, setUsername] = useState("");
     useEffect(() => {
         // 判断是否登录，若还没登录，则重定向回登录页
         if (!isLogined()) {
@@ -40,6 +42,7 @@ export default function Frame(props) {
             // 若已经登录，则判断该用户是管理员还是普通用户
             axios.get('/user?methodName=findUserById&id=' + getToken())
                 .then(res => {
+                    setUsername(res.data.username);
                     if (res.data.superuser === "2" || res.data.superuser === "3") {
                         // 该用户为管理员，在前台页面时有权访问后台页面
                         if (props.url === "user") {
@@ -88,7 +91,7 @@ export default function Frame(props) {
                     <NavLink to={superuser === "admin" ? "/admin/users/editpower/" + getToken() : "/user/edit"}>
                         <Space>
                             <Avatar>A</Avatar>
-                            <span style={{ color: 'white' }}>用户名</span>
+                            <span style={{ color: 'white' }}>{username}</span>
                             <DownOutlined style={{ color: 'white' }} />
                         </Space>
                     </NavLink>
