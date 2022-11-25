@@ -148,7 +148,7 @@ export default function UserEditPower() {
                 headers: { 'Content-Type': 'application/json;charset=utf-8' }
             }).then((res) => {
                 if (res.data.msg === "fail") {
-                    message.success("保存失败！该用户名已存在！");
+                    message.error("保存失败！该用户名已存在！");
                 }
                 else {
                     navigate('/admin/users');
@@ -175,7 +175,7 @@ export default function UserEditPower() {
                 headers: { 'Content-Type': 'application/json;charset=utf-8' }
             }).then((res) => {
                 if (res.data.msg === "fail") {
-                    message.success("保存失败！该用户名已存在！");
+                    message.error("保存失败！该用户名已存在！");
                 }
                 else {
                     navigate('/admin/users');
