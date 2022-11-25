@@ -90,7 +90,9 @@ export default function Frame(props) {
                 >
                     <NavLink to={superuser === "admin" ? "/admin/users/editpower/" + getToken() : "/user/edit"}>
                         <Space>
-                            <Avatar>A</Avatar>
+                            {superuser === "admin" ?
+                                <Avatar style={{ background: '#FF9A9A' }} >A</Avatar>
+                                : <Avatar style={{ background: '#7AE8D8' }} >U</Avatar>}
                             <span style={{ color: 'white' }}>{username}</span>
                             <DownOutlined style={{ color: 'white' }} />
                         </Space>
