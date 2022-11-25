@@ -71,7 +71,7 @@ export default function SignIn() {
                         },
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -84,7 +84,7 @@ export default function SignIn() {
                 >
                     <Input.Password
                         prefix={<LockOutlined className="site-form-item-icon" />}
-                        placeholder="Password"
+                        placeholder="密码"
                     />
                 </Form.Item>
 
