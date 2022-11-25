@@ -306,7 +306,7 @@ public class UserDaoImpl implements UserDao {
 
         try {
             // 判断该用户的用户名是否已被注册
-            if (findUserById(user.getId()).getUsername() != user.getUsername() && !isValid(user.getUsername())) {
+            if (!findUserById(user.getId()).getUsername().equals(user.getUsername()) && !isValid(user.getUsername())) {
                 return 0;
             }
 
