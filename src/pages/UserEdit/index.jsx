@@ -50,7 +50,6 @@ const tailFormItemLayout = {
 export default function UserEdit() {
     // Form表单初始化值
     const [form] = Form.useForm();
-    const { userId } = useParams();
     useEffect(() => {
         axios.get('/user?methodName=findUserById&id=' + getToken())
             .then((res) => {
@@ -76,7 +75,7 @@ export default function UserEdit() {
         // 修改用户
         axios.post('/user', {
             "methodName": "updateUser",
-            "id": userId,
+            "id": getToken(),
             "username": values.username,
             "password": values.password,
             "nickname": values.nickname,
@@ -86,8 +85,9 @@ export default function UserEdit() {
         }, {
             headers: { 'Content-Type': 'application/json;charset=utf-8' }
         }).then((res) => {
+            console.log(res);
             if (res.data.msg === "fail") {
-                message.success("保存失败！该用户名已存在！");
+                message.error("保存失败！该用户名已存在！");
             }
             else {
                 message.success("保存成功！");
