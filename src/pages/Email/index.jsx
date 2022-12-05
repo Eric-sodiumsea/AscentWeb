@@ -71,8 +71,14 @@ export default function Email() {
                 message.success("保存失败！");
             } else {
                 message.success("保存成功！");
-                // 刷新页面
-                window.location.reload();
+                axios.get('/mail?methodName=findMail')
+                    .then(res => {
+                        data.emailAddress = res.data.fromaddress;
+                        data.emailPassword = res.data.frompassword;
+                        data.receiptEmail = res.data.toaddress;
+                    }).catch(err => {
+                        console.log(err);
+                    });
             }
         }).catch(error => {
             message.success("保存失败！");
