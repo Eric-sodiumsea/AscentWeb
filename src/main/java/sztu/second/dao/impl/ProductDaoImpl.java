@@ -23,7 +23,7 @@ public class ProductDaoImpl implements ProductDao {
             QueryRunner qr = new QueryRunner(DruidUtils.getDataSource());
 
             // 2. 编写SQL 判断是否删除 取出delsoft = 0 的数据，即未删除的数据
-            String sql = "SELECT id, productname, image, price, description FROM product WHERE delsoft = 0";
+            String sql = "SELECT id, image, productname, price, stock, description FROM product WHERE delsoft = 0";
 
             // 3. 执行查询
             List<Product> productList = null;
@@ -43,7 +43,7 @@ public class ProductDaoImpl implements ProductDao {
             QueryRunner qr = new QueryRunner(DruidUtils.getDataSource());
 
             // 2. 编写SQL
-            String sql = "SELECT id, productname, image, price, description FROM product WHERE delsoft = 0 AND id = ?";
+            String sql = "SELECT id, image, productname, price, stock, description FROM product WHERE delsoft = 0 AND id = ?";
 
             Product product = qr.query(sql, new BeanHandler<Product>(Product.class), id);
 
@@ -63,7 +63,7 @@ public class ProductDaoImpl implements ProductDao {
         try {
             QueryRunner qr = new QueryRunner(DruidUtils.getDataSource());
 
-            String sql = "SELECT id, productname, image, price, description FROM product WHERE delsoft = 0 AND productname LIKE ?";
+            String sql = "SELECT id, image, productname, price, description FROM product WHERE delsoft = 0 AND productname LIKE ?";
 
             productname = "%" + productname + "%";
             List<Product> productList = null;
@@ -87,7 +87,7 @@ public class ProductDaoImpl implements ProductDao {
             List<Product> productList = new ArrayList<Product>();
 
             for (Category category : categoryList) {
-                String sql = "SELECT id, productname, image, price, description FROM product WHERE delsoft = 0 AND id = ?";
+                String sql = "SELECT id, image, productname, price, description FROM product WHERE delsoft = 0 AND id = ?";
 
                 Product product = qr.query(sql, new BeanHandler<Product>(Product.class), category.getProductid());
                 productList.add(product);
