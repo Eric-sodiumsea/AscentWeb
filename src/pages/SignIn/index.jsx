@@ -89,12 +89,6 @@ export default function SignIn() {
                 </Form.Item>
 
                 <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>记住我</Checkbox>
-                    </Form.Item>
-                </Form.Item>
-
-                <Form.Item>
                     <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
                         登录
                     </Button>
