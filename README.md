@@ -144,39 +144,10 @@ AscentWeb医药商务系统是基于互联网的应用软件。它包括用户�
 
 ### 3.1 概念结构设计
 
-根据对网上书店的需求分析，画出如下E-R图。
+根据对 AscentWeb 医药系统的需求分析，画出如下E-R图。
+![image](https://user-images.githubusercontent.com/101373342/205913588-cd9df756-624f-4880-8341-0f20971cc956.png)
 
-![img](https://img-blog.csdnimg.cn/20190106094928245.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
 
-图1.书籍信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095009631.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
-图2.库存信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095030773.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
-图3.订单信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095050364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
-图4.顾客信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095108245.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
-图5.管理员信息
-
-![img](https://img-blog.csdnimg.cn/20190106095122981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
-图6.图书类型信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095136681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
- 图7.订单详细信息ER图
-
-![img](https://img-blog.csdnimg.cn/20190106095159613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1RfSV9BX05f,size_16,color_FFFFFF,t_70)
-
- 图8.网上购书系统ER图
 
 ### 3.2 逻辑结构设计
 
@@ -184,335 +155,187 @@ AscentWeb医药商务系统是基于互联网的应用软件。它包括用户�
 
 根据E-R图转换成如下关系模型：
 
-书籍(<u>ISBN号</u>、订单详情、书籍类型、管理员名称、书籍名称、作者、出版年份、成交量、出版社名称、折扣)。
-
-库存(<u>ISBN号</u>、库存量、库存下限，书籍名称)。
-
-订单(<u>订单号</u>、<u>顾客昵称</u>、订购人、订购日期、订单书籍、书籍数量、发货日期)。
-
-顾客(<u>注册名</u>、管理员名称、真实姓名、家庭住址、联系方式、购书卡号)。
-
-管理员(<u>管理员编号</u>、管理员名字、密码、具体身份、邮箱)。
-
-图书类型(数据类型、类别名称)。
-
-订单详细(<u>详细订单号</u>、订单号、订购数量、发货状态、收货状态、卖出总价)
+邮件（<u>邮件ID</u>，发送邮箱的地址，发送邮箱的密码，收件邮箱的地址）
+用户（<u>用户ID</u>，<u>用户名</u>，密码，昵称，手机号，邮箱地址，收获地址，用户权限，软删除标志）
+商品（<u>商品ID</u>，<u>商品名</u>，图片，价格，库存量，描述，软删除标志）
+用户管理商品（<u>管理ID</u>，用户ID，商品ID）
+商品分类（<u>分类ID</u>，商品ID，分类名）
 
 #### 3.2.2 细化表结构
 
 为方便，根据上述文字描述，用英文简写表和列。
 
-书籍信息表
+mailtb表
 
-|    说明    |     列名      | 数据类型 |   约束   |
-| :--------: | :-----------: | :------: | :------: |
-|   ISBN号   |  BookISBNId   |   Char   |   主码   |
-|  订单详情  |   BookOrder   |   Char   | not null |
-|  书籍类型  |   BookType    |   Char   | not null |
-| 管理员名称 | BookAdminName |   Char   | not null |
-|  书籍名称  |   BookName    |   Char   | not null |
-|    作者    |  BookWriter   |   Char   | not null |
-|  出版年份  | BookPrintYear | Datetime | not null |
-|   成交量   |    BookVOL    |  BIGINT  | not null |
-| 出版社名称 | BookPrintName |   Char   | not null |
-|    折扣    | BookDiscount  |   int    | not null |
+|      说明      |      列名        |   数据类型  |   约束   |
+|   :--------:   | :-----------:    |  :------:  | :------: |
+|     邮件ID      |        id       |     int     |   主码   |
+|  发送邮箱的地址  |   fromaddress   |   varchar   | not null |
+|  发送邮箱的密码  |   frompassword  |   varchar   | not null |
+|  收件邮箱的地址  |    toaddress    |   varchar   | not null |
 
-库存表
+user表
 
-|   说明   |     列名      | 数据类型 |   约束   |
-| :------: | :-----------: | :------: | :------: |
-|  ISBN号  |  BookISBNId   |   Char   |   主码   |
-|  库存量  |  EntreStock   |   Int    |   主码   |
-| 书籍名称 |   BookName    |   Char   | not null |
-| 库存下限 | EntreFloorNum |   int    | not null |
+|    说明    |     列名    |  数据类型  |   约束   |
+|  :------:  | :--------: |  :------:  | :------: |
+|   用户ID   |     id      |     int    |   主码   |
+|   用户名   |  username   |   varchar  | not null |
+|    密码    |   password  |   varchar  | not null |
+|    昵称    |   nickname  |   varchar  | not null |
+|   手机号   |    tel      |   varchar  | not null |
+|   邮箱地址 |    email    |   varchar  | not null |
+|  收货地址  |   address   |   varchar  | not null |
+|  用户权限  |  superuser  |   varchar  | not null |
+| 软删除标志 |   delsoft   |   varchar  | not null |
 
-订单表
+product表
 
 |   说明   |       列名       | 数据类型 |   约束   |
 | :------: | :--------------: | :------: | :------: |
-|  订单号  |     OrderID      |   Char   |   主码   |
-| 顾客昵称 | OrderCusNickname |   Char   |   主码   |
-|  订购人  |   OrderCusName   |   Char   | not null |
-| 订购日期 |    OrderData     | Datetime | not null |
-| 订单书籍 |    OrderBook     |   Char   | not null |
-| 书籍数量 |    OrderCount    |   int    | not null |
-| 发货日期 |  OrderSendData   | Datetime | not null |
+|  商品ID  |        id        |    int   |   主码   |
+|   图片   |       image      | varchar  | not null |
+|  商品名  |    productname   | varchar  | not null |
+|   价格   |      price       |   float  | not null |
+|  库存量  |      stock       | varchar  | not null |
+|   描述   |    description   | varchar  | not null |
+| 软删除标志 |    delsoft     |  varchar  | not null |
 
-顾客信息表
+user_product表
 
 |   说明   |      列名       | 数据类型 |   约束   |
 | :------: | :-------------: | :------: | :------: |
-|  注册名  | CusResNikeName  |   char   |   主码   |
-| 真实姓名 |     CusName     |   char   | not null |
-| 家庭住址 |   CusAddress    |   char   | not null |
-| 联系方式 |    CusPhone     |   char   | not null |
-| 购书卡号 | CusBoughtCardId |   char   | not null |
+|  管理ID  |       id        |   int    |   主码    |
+|  用户ID  |     userid      |   int    | not null  |
+|  商品ID  |   productid     |   int    | not null  |
 
-管理员信息表
+category表
 
 |    说明    |    列名    | 数据类型 |   约束   |
 | :--------: | :--------: | :------: | :------: |
-| 管理员编号 |   ManaID   |   Char   |   主码   |
-| 管理员名字 |  ManaName  |   Char   | not null |
-|    密码    | ManaPasswd |   Char   | not null |
-|  具体身份  |  ManaIden  |   Char   | not null |
-|    邮箱    |  ManaMail  |   Char   | not null |
-
-图书类型表
-
-|   说明   |     列名      | 数据类型 |   约束   |
-| :------: | :-----------: | :------: | :------: |
-| 数据类型 |   BookClass   |   Char   |   主码   |
-| 类别名称 | BookClassName |   Char   | not null |
+|   分类ID   |     id      |    int   |   主码   |
+|   商品ID   |  productid  |    int   | not null |
+|   分类名   | categoryname | varchar | not null |
 
 ### 3.3 **数据库实施**
 
 #### 3.3.1 建表
 
-书籍信息表：
+mailtb表：
 
 ```
-CREATE TABLE bookinfo (
- 
-`BookISBNId`  char(80) NOT NULL ,
- 
-`BookOrder`  char(80) NOT NULL ,
- 
-`BookType`  char(50) NOT NULL ,
- 
-`BookAdminName`  char(20) NOT NULL ,
- 
-`BookName`  char(30) NOT NULL ,
- 
-`BookWriter`  char(30) NOT NULL ,
- 
-`BookPrintYear`  datetime NOT NULL ,
- 
-`BookVOL`  bigint NOT NULL ,
- 
-`BookPrintName`  char(30) NOT NULL ,
- 
-`BookDiscount`  int NOT NULL ,
- 
-PRIMARY KEY (`BookISBNId`)
- 
-)
+CREATE TABLE mailtb (
+
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '电子邮件表ID',
+  
+  `fromaddress` varchar(50) DEFAULT NULL COMMENT '发送者邮件地址',
+  
+  `frompassword` varchar(30) DEFAULT NULL COMMENT '发送者邮件密码',
+  
+  `toaddress` varchar(50) DEFAULT NULL COMMENT '接收者邮件地址',
+  
+  PRIMARY KEY (`id`)
+  
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk COMMENT='电子邮件表'
+
+;
+```
+
+user表：
+
+```
+CREATE TABLE user (
+
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  
+  `username` varchar(32) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL COMMENT '用户名',
+  
+  `password` varchar(32) CHARACTER SET gbk COLLATE gbk_chinese_ci NOT NULL COMMENT '密码',
+  
+  `nickname` varchar(64) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '用户全称',
+  
+  `tel` varchar(32) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '联系电话',
+  
+  `email` varchar(64) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '电子邮件',
+  
+  `address` varchar(100) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '收获地址',
+  
+  `superuser` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '用户角色权限3超级用户,2管理员,1普通用户',
+  
+  `delsoft` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '软删除标志1软删除,0正常',
+  
+  PRIMARY KEY (`id`)
+  
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb3 COMMENT='用户表'
  
 ;
 ```
 
-库存信息表：
+product表：
 
 ```
-CREATE TABLE  repertoryinfo(
- 
-`EntreBookISBNId`  char(80) NOT NULL ,
- 
-`EntreStock`  int NOT NULL ,
- 
-`EntreBookName`  char(30) NOT NULL ,
- 
-`EntreFloorNum`  int NOT NULL ,
- 
-PRIMARY KEY (`EntreBookISBNId`, `EntreStock`)
- 
-)
+CREATE TABLE product (
+
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+  
+  `image` varchar(100) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '商品图片',
+  
+  `productname` varchar(32) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '商品名称',
+  
+  `price` float DEFAULT NULL COMMENT '价格',
+  
+  `stock` varchar(50) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '商品库存量',
+  
+  `description` varchar(255) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '商品描述',
+  
+  `delsoft` varchar(2) CHARACTER SET gbk COLLATE gbk_chinese_ci DEFAULT NULL COMMENT '软删除标志',
+  
+  PRIMARY KEY (`id`)
+  
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COMMENT='商品表'
  
 ;
 ```
 
-订单表：
+user_product表：
 
 ```
-CREATE TABLE orderinfo (
- 
-`OrderID`  char(80) NOT NULL ,
- 
-`OrderCusNickname`  char(20) NOT NULL ,
- 
-`OrderCusName`  char(20) NOT NULL ,
- 
-`OrderData`  datetime NOT NULL ,
- 
-`OrderBook`  char(30) NOT NULL ,
- 
-`OrderCount`  int NOT NULL ,
- 
-`OrderSendData`  datetime NOT NULL ,
- 
-PRIMARY KEY (`OrderID`, `OrderCusNickname`)
- 
-)
+CREATE TABLE user_product (
+
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键编号',
+  
+  `userid` int DEFAULT NULL COMMENT '外键,引用用户id',
+  
+  `productid` int DEFAULT NULL COMMENT '外键,引用商品id',
+  
+  PRIMARY KEY (`id`),
+  
+  KEY `user_product__usrid_fk` (`userid`),
+  
+  KEY `user_product__productid_fk` (`productid`),
+  
+  CONSTRAINT `user_product__productid_fk` FOREIGN KEY (`productid`) REFERENCES `product` (`id`),
+  
+  CONSTRAINT `user_product__usrid_fk` FOREIGN KEY (`userid`) REFERENCES `user` (`id`)
+  
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb3 COMMENT='用户与商品中间表'
  
 ;
 ```
 
-顾客信息表：
+category表：
 
 ```
-CREATE TABLE cusinfo (
- 
-`CusResNikeName`  char(20) NOT NULL ,
- 
-`CusName`  char(20) NOT NULL ,
- 
-`CusAddress`  char(50) NOT NULL ,
- 
-`CusPhone`  char(15) NOT NULL ,
- 
-`CusBoughtCardId`  char(30) NOT NULL ,
- 
-PRIMARY KEY (`CusResNikeName`)
- 
-)
+CREATE TABLE category (
+
+  `id` int NOT NULL AUTO_INCREMENT,
+  
+  `productid` int DEFAULT NULL,
+  
+  `categoryname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  
+  PRIMARY KEY (`id`)
+  
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
  
 ;
 ```
-
-管理员信息表：
-
-```
-CREATE TABLE managerinfo (
- 
-`ManaID`  char(30) NOT NULL ,
- 
-`ManaName`  char(20) NOT NULL ,
- 
-`ManaPasswd`  char(30) NOT NULL ,
- 
-`ManaIden`  char(20) NOT NULL ,
- 
-`ManaMail`  char(20) NOT NULL ,
- 
-PRIMARY KEY (`ManaID`)
- 
-)
- 
-;
-```
-
-图书类型表：
-
-```
-CREATE TABLE booktypeinfo (
- 
-`BookClass`  char(20) NOT NULL ,
- 
-`BookClassName`  char(20) NOT NULL ,
- 
-PRIMARY KEY (`BookClass`)
- 
-)
- 
-;
-```
-
-附操作bookinfo表的代码，仅仅实现功能，没有错误检查，什么都没有。(纯属应付，和数据库交互不能拼接SQL语句，防止SQL注入。)
-
-```
-import pymysql
- 
-# 参数一：mysql服务所在主机的ip
-# 参数二：用户名
-# 三：密码
-# 四：数据库名
-db = pymysql.connect('127.0.0.1', "root", "tian", "managebook")
-# 创建一个cursor对象
-flag=True
-while flag==True:
-    cursor = db.cursor()
-    print('1:增加')
-    print('2:删除')
-    print('3:修改')
-    print('4:查找')
-    print('5:退出')
-    print('6:显示')
-    work=input('请输入想要执行的功能\n')
-    if work=='1':
-        print("请输入书籍信息\n")
-        s0=input('ISBN号:')
-        s1 = input('订单详情:')
-        s2 = input('书籍类型:')
-        s3 = input('管理员名称:')
-        s4 = input('书籍名称:')
-        s5 = input('作者:')
-        s6 = input('出版年份:')
-        s7 = input('成交量:')
-        s8 = input('出版社名称:')
-        s9 = input('折扣:')
-        sql="insert into bookinfo VALUES('%s','%s','%s','%s','%s','%s','%s',%d,'%s',%d );"%(s0,s1,s2,s3,s4,s5,s6,int(s7),s8,int(s9))
-        try:
-            # 执行sql语句
-            cursor.execute(sql)
-            # 提交到数据库执行
-            db.commit()
-            print("增加成功\n")
-            # cursor.execute("select * from bookinfo;")
-            # data = cursor.fetchall()
-            # print(data)
-        except:
-            # 如果发生错误则回滚
-            db.rollback()
-            print('ERROR,AGAIN')
-    # 执行sql语句
-    elif work=='2':
-        a=input('请输入要删除的书籍ISBN号\n')
-        sql ="delete from bookinfo where BookISBNId='%s'"%a
-        try:
-            # 执行sql语句
-            cursor.execute(sql)
-            # 提交到数据库执行
-            db.commit()
-            print('删除成功\n')
-            # cursor.execute("select * from bookinfo;")
-            # data = cursor.fetchall()
-            # print(data)
-        except:
-            # 如果发生错误则回滚
-            db.rollback()
-            print('ERROR,AGAIN')
-    elif work=='3':
-        cursor.execute("select BookISBNId from bookinfo;")
-        data = cursor.fetchall()
-        print("ISBN号如下：",data)
-        a = input('请输入要修改的书籍ISBN号\n')
-        b=input('请输入想要修改的属性和信息\n').split()
-        print(b[0],b[1])
-        sql = "update bookinfo set %s=%s where BookISBNId='%s'"%(b[0],b[1],a)
-        try:
-            # 执行sql语句
-            cursor.execute(sql)
-            # 提交到数据库执行
-            db.commit()
-            print('修改成功\n')
-            # cursor.execute("select * from bookinfo;")
-            # data = cursor.fetchall()
-            # print(data)
-        except:
-            # 如果发生错误则回滚
-            db.rollback()
-            print('ERROR,AGAIN')
-    # 获取返回信息
-    # data = cursor.fetchall()
-    # print(data)
-    elif work=='4':
-        print('有以下表：bookinfo、booktypeinfo、cusinfo、managerinfo、orderinfo、repertoryinfo')
-        a=input('请输入想要查找的信息\n')
- 
-        sql="select * from %s"%a
-        cursor.execute(sql)
- 
-        # 获取返回信息
-        data = cursor.fetchall()
-        print('************************结果如下\n',data)
-    # 断开连接
-    elif work=='5':
-        flag=False
-    else:
-        cursor.execute("select * from bookinfo;")
-        data = cursor.fetchall()
-        print(data)
-cursor.close()
-db.close()
-```
-
